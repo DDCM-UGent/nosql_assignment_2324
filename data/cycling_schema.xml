@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <xsd:simpleType name="twocharstring">
+        <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="2" />
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="positivedecimal">
+        <xsd:restriction base="xsd:decimal">
+            <xsd:minExclusive value="0"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="nonnegativeduration">
+        <xsd:restriction base="xsd:duration">
+            <xsd:minInclusive value="PT0H0M0S"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="positiveduration">
+        <xsd:restriction base="xsd:duration">
+            <xsd:minExclusive value="PT0H0M0S"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="type">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="Road Race" />
+            <xsd:enumeration value="Individual Time Trial" />
+            <xsd:enumeration value="Team Time Trial" />
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="statustype">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="Did Finish" />
+            <xsd:enumeration value="Did Not Finish" />
+            <xsd:enumeration value="Did Not Start" />
+            <xsd:enumeration value="Over Time Limit" />
+            <xsd:enumeration value="Disqualified" />
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="difficultytype">
+        <xsd:restriction base="xsd:integer">
+            <xsd:minInclusive value="1"/>
+            <xsd:maxInclusive value="5"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="cyclisttype">
+        <xsd:sequence>
+            <xsd:element name="name" type="xsd:string"/>
+            <xsd:element name="country_code" type="twocharstring"/>
+            <xsd:element name="birthdate" type="xsd:date"/>
+            <xsd:element name="birthplace" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="weight" type="positivedecimal" minOccurs="0"/>
+            <xsd:element name="size" type="positivedecimal" minOccurs="0"/>
+            <xsd:element name="team" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="rankingentrytype">
+        <xsd:sequence>
+            <xsd:element name="cyclist" type="cyclisttype"/>
+            <xsd:element name="position" type="xsd:positiveInteger" minOccurs="0"/>
+            <xsd:element name="time" type="positiveduration" minOccurs="0"/>
+            <xsd:element name="bonus" type="nonnegativeduration" minOccurs="0"/>
+            <xsd:element name="status" type="statustype"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="rankingtype">
+        <xsd:sequence>
+            <xsd:element name="ranking_entry" maxOccurs="unbounded" type="rankingentrytype"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="routeType">
+        <xsd:sequence>
+            <xsd:element name="departure" type="xsd:string"/>
+            <xsd:element name="arrival" type="xsd:string"/>
+            <xsd:element name="distance" type="positivedecimal"/>
+            <xsd:element name="elevation" type="xsd:nonNegativeInteger"/>
+            <xsd:element name="difficulty" type="difficultytype"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="stagetype">
+        <xsd:sequence>
+            <xsd:element name="race" type="xsd:string"/>
+            <xsd:element name="country_code" type="twocharstring"/>
+            <xsd:element name="nr" type="xsd:positiveInteger" minOccurs="0"/>
+            <xsd:element name="date" type="xsd:date"/>
+            <xsd:element name="type" type="type"/>
+            <xsd:element name="description" type="xsd:string"/>
+            <xsd:element name="route" type="routeType"/>
+            <xsd:element name="ranking" type="rankingtype"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="stagestype">
+        <xsd:sequence>
+            <xsd:element name="stage" maxOccurs="unbounded" type="stagetype"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element name="stages" type="stagestype"/>
+
+</xsd:schema>

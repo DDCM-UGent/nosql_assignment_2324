@@ -1,0 +1,120 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "description": "The json schema for an array of cycling stages",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "race": {
+                "type": "string"
+            },
+            "country_code": {
+                "$ref": "#/$defs/twocharstring"
+            },
+            "nr": {
+                "type": "integer",
+                "minimum": 1
+            },
+            "date": {
+                "type": "string",
+                "format": "date"
+            },
+            "type": {
+                "enum": ["Road Race", "Individual Time Trial", "Team Time Trial"]
+            },
+            "description": {
+                "type": "string"
+            },
+            "route": {
+                "type": "object",
+                "properties": {
+                    "departure": {
+                        "type": "string"
+                    },
+                    "arrival": {
+                        "type": "string"
+                    },
+                    "distance": {
+                        "$ref": "#/$defs/positivedecimal"
+                    },
+                    "elevation": {
+                        "$ref": "#/$defs/positiveinteger"
+                    },
+                    "difficulty": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 5
+                    }
+                },
+                "required": ["departure", "arrival", "distance", "elevation", "difficulty"]
+            },
+            "ranking": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "cyclist": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "country_code": {
+                                    "$ref": "#/$defs/twocharstring"
+                                },
+                                "birthdate": {
+                                    "type": "string",
+                                    "format": "date"
+                                },
+                                "birthplace": {
+                                    "type": "string"
+                                },
+                                "weight": {
+                                    "$ref": "#/$defs/positivedecimal"
+                                },
+                                "size": {
+                                    "$ref": "#/$defs/positivedecimal"
+                                },
+                                "team": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": ["name", "country_code", "birthdate", "team"]
+                        },
+                        "position": {
+                            "$ref": "#/$defs/positiveinteger"
+                        },
+                        "time": {
+                            "type": "string",
+                            "format": "duration"
+                        },
+                        "bonus": {
+                            "type": "string",
+                            "format": "duration"
+                        },
+                        "status": {
+                            "enum": ["Did Finish", "Did Not Finish", "Did Not Start", "Over Time Limit", "Disqualified"]
+                        }
+                    },
+                    "required": ["cyclist", "status"]
+                }
+            }
+        },
+        "required": ["race", "country_code", "date", "type", "description", "route", "ranking"]
+    },
+    "$defs": {
+        "twocharstring": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 2
+        },
+        "positivedecimal": {
+            "type": "number",
+            "exclusiveMinimum": 0
+        },
+        "positiveinteger": {
+            "type": "integer",
+            "exclusiveMinimum": 0
+        }
+    }
+}
